@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .checkout-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="checkout-container">
+    <h2>Checkout</h2>
+    <form id="checkout-form">
+        <input type="text" id="name" placeholder="Enter your name" required>
+        <input type="tel" id="phone" placeholder="Enter your phone number" required>
+        <input type="text" id="address" placeholder="Enter your address" required>
+        <select id="payment-method" required>
+            <option value="cod">Cash on Delivery</option>
+            <option value="online">Online Payment</option>
+        </select>
+        <button type="submit">Confirm Order</button>
+    </form>
+    <p id="order-message" style="color: green; font-weight: bold; display: none;"></p>
+</div>
+
+<script>
+    document.getElementById("checkout-form").addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        let name = document.getElementById("name").value;
+        let phone = document.getElementById("phone").value;
+        let address = document.getElementById("address").value;
+        let paymentMethod = document.getElementById("payment-method").value;
+
+        if (!name || !phone || !address) {
+            alert("Please fill all fields.");
+            return;
+        }
+        
+        if (paymentMethod === "online") {
+            alert("Redirecting to online payment gateway...");
+            setTimeout(() => {
+                alert("Payment successful!");
+                completeOrder(name);
+            }, 2000);
+        } else {
+            completeOrder(name);
+        }
+    });
+
+    function completeOrder(name) {
+        let deliveryTime = Math.floor(Math.random() * 30) + 20; // Between 20-50 mins
+        document.getElementById("order-message").innerText = `Thank you, ${name}! Your order will be delivered in approximately ${deliveryTime} minutes.`;
+        document.getElementById("order-message").style.display = "block";
+        
+        // Clear cart data after order confirmation
+        sessionStorage.removeItem("cart");
+        
+        // Disable form to prevent multiple submissions
+        document.getElementById("checkout-form").reset();
+    }
+</script>
+
+</body>
+</html>
+

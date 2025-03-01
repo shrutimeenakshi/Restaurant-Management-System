@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to the Khana Khazana Restaurant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="checkLogin()">
+
+    <h3 align="center">
+        <br /> View Menu
+        <input type="submit" name="menu" value="View menu" onclick="viewMenu()">
+
+        <br /><br />
+        <button onclick="logout()">Logout</button> <!-- Logout Button -->
+    </h3>
+
+    <script>
+        function checkLogin() {
+            if (sessionStorage.getItem("loggedin") !== "true") {
+                window.location.href = "admin_login.html"; // Redirect if not logged in
+            }
+        }
+        function viewMenu() {
+            window.location.href = "menu.html"; // Redirect to the menu page
+        }
+
+        function logout() {
+            sessionStorage.removeItem("loggedin"); // Clear session
+            window.location.href = "admin_login.html"; // Redirect to login
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .login-btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .admin-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .admin-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <h2>Login</h2>
+        <input type="text" id="name" placeholder="Enter your Name" required>
+        <input type="text" id="username" placeholder="Enter Username" required>
+        <input type="password" id="password" placeholder="Enter Password" required>
+        <button class="login-btn" onclick="login()">Login</button>
+
+        <h4>or</h4>
+
+        <button class="admin-btn" onclick="window.location.href='admin_login.html'">Admin Login</button>
+    </div>
+
+    <script>
+        function login() {
+            let name = document.getElementById("name").value;
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            if (name === "" || username === "" || password === "") {
+                alert("Please fill all the fields!");
+                return;
+            }
+
+            // Check if the password is "1234"
+            if (password !== "1234") {
+                alert("Invalid password! Please try again.");
+                return;
+            }
+
+            // Set the customer name and logged-in status in session storage
+            sessionStorage.setItem("customerName", name);
+            sessionStorage.setItem("customer", "true"); // Indicate that the customer is logged in
+            window.location.href = "customer.html"; // Redirect to the customer page
+        }
+    </script>
+
+</body>
+
+</html>

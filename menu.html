@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Menu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .menu-item {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item img {
+            max-width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .menu-item h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        .menu-item p {
+            color: #666;
+        }
+
+        .admin-panel {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        .edit-price-btn {
+            background: #007bff;
+        }
+
+        .edit-price-btn:hover {
+            background: #0056b3;
+        }
+
+        .remove-btn {
+            background: #dc3545;
+        }
+
+        .remove-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+
+<body onload="loadMenu()">
+
+    <h1>Restaurant Menu</h1>
+    <div class="menu" id="menu"></div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <h2>Add New Food Item</h2>
+        <input type="text" id="foodName" placeholder="Food Name">
+        <input type="text" id="foodDesc" placeholder="Description">
+        <input type="text" id="foodImage" placeholder="Image Name (e.g., pizza.jpg)">
+        <input type="number" id="foodPrice" placeholder="Price">
+        <button onclick="addFoodItem()">Add Food Item</button>
+    </div>
+
+    <script>
+
+        fetch("http://127.0.0.1:5000/menu")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Check if data is received
+                displayMenu(data);
+            })
+            .catch(error => console.error("Error fetching menu:", error));
+
+        function displayMenu(menuItems) {
+            const menuContainer = document.getElementById("menu-container");
+            menuContainer.innerHTML = ""; // Clear old data
+
+            menuItems.forEach(item => {
+                const menuItem = document.createElement("div");
+                menuItem.classList.add("menu-item");
+                menuItem.innerHTML = `
+            <img src="images/${item.image}" alt="${item.name}">
+            <h3>${item.name}</h3>
+            <p>${item.description}</p>
+            <p><strong>Price: $${item.price}</strong></p>
+        `;
+                menuContainer.appendChild(menuItem);
+            });
+        }
+    </script>
+
+    let defaultMenuItems = [
+    { name: "Spaghetti Carbonara", description: "Classic Italian pasta dish with eggs, cheese, pancetta, and pepper.",
+    image: "spaghetti.jpg", price: 12 },
+    { name: "Margherita Pizza", description: "Traditional pizza topped with fresh tomatoes, mozzarella cheese, and
+    basil.", image: "pizza.jpg", price: 10 },
+    { name: "Chicken 65", description: "A spicy, deep-fried chicken dish marinated in a blend of yogurt and spices.",
+    image: "chicken_65.jpg", price: 10 },
+    { name: "Caesar Salad", description: "Crisp romaine lettuce with Caesar dressing, croutons, and parmesan cheese.",
+    image: "CaesarSalad.jpg", price: 8 },
+    { name: "Grilled Salmon", description: "Fresh salmon fillet grilled to perfection, served with lemon and herbs.",
+    image: "salmon.jpg", price: 15 },
+    { name: "Chicken Biriyani", description: "A fragrant and flavorful rice dish made with marinated chicken, basmati
+    rice, and a blend of aromatic spices.", image: "Chicken_Biriyani.jpg", price: 35 },
+    { name: "Chicken Curry", description: "Spicy chicken curry cooked with aromatic spices and coconut milk.", image:
+    "chicken_curry.jpg", price: 35 },
+    { name: "Vegetable Stir Fry", description: "A mix of fresh vegetables stir-fried in a savory sauce.", image:
+    "stir_fry.jpg", price: 20 },
+    { name: "Chocolate Cake", description: "Rich and moist chocolate cake topped with creamy chocolate frosting.",
+    image: "chocolate_cake.jpg", price: 18 },
+    { name: "Cheeseburger", description: "Juicy beef patty topped with cheese, lettuce, and tomato on a toasted bun.",
+    image: "cheeseburger.jpg", price: 22 },
+    { name: "Pancakes", description: "Fluffy pancakes served with maple syrup and fresh berries.", image:
+    "pancakes.jpg", price: 15 },
+    { name: "Shrimp Scampi", description: "Shrimp sautéed in garlic, butter, and white wine, served over pasta.", image:
+    "shrimp_scampi.jpg", price: 11 },
+    { name: "Mushroom Risotto", description: "Creamy risotto cooked with fresh mushrooms and parmesan cheese.", image:
+    "risotto.jpg", price: 25 }
+    ];
+
+    let menuItems = JSON.parse(localStorage.getItem("menuItems")) || defaultMenuItems;
+
+    function loadMenu() {
+    const menuContainer = document.getElementById("menu");
+    menuContainer.innerHTML = ""; // Clear previous menu
+    menuItems.forEach((item, index) => {
+    let menuItem = document.createElement("div");
+    menuItem.classList.add("menu-item");
+
+    menuItem.innerHTML = `
+    <img src="${item.image}" alt="${item.name}">
+    <h3>${item.name}</h3>
+    <p>${item.description}</p>
+    <p><strong>Price: $<span id="price-${index}">${item.price}</span></strong></p>
+    <button onclick="addToCart('${item.name}', ${item.price})">Add to Cart</button>
+    ${sessionStorage.getItem("admin") === "true" ? `
+    <button class="edit-price-btn" onclick="editPrice(${index})">Edit Price</button>
+    <button class="remove-btn" onclick="removeFoodItem(${index})">Remove</button>
+    ` : ""}
+    `;
+    menuContainer.appendChild(menuItem);
+    });
+
+    // Show admin panel if admin is logged in
+    if (sessionStorage.getItem("admin") === "true") {
+    document.getElementById("adminPanel").style.display = "block";
+    }
+    }
+
+    function editPrice(index) {
+    let newPrice = prompt("Enter new price for " + menuItems[index].name + ":", menuItems[index].price);
+    if (newPrice !== null && !isNaN(newPrice) && newPrice.trim() !== "") {
+    menuItems[index].price = parseFloat(newPrice);
+    localStorage.setItem("menuItems", JSON.stringify(menuItems));
+    document.getElementById(`price-${index}`).innerText = newPrice;
+    alert("Price updated successfully!");
+    } else {
+    alert("Invalid price entered!");
+    }
+    }
+
+    function removeFoodItem(index) {
+    menuItems.splice(index, 1);
+    localStorage.setItem("menuItems", JSON.stringify(menuItems));
+    loadMenu();
+    }
+
+    function addToCart(name, price) {
+    alert(`${name} added to cart!`);
+    }
+
+    // Clear localStorage to avoid old data issues
+    localStorage.setItem("menuItems", JSON.stringify(defaultMenuItems));
+    </script>
+
+</body>
+
+</html>

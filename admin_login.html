@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="login-container">
+        <h2>Admin Login</h2>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button onclick="login()">Login</button>
+    </div>
+
+    <script>
+        function login() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            if (username === "admin" && password === "1234") { // Change credentials as needed
+                sessionStorage.setItem("admin", "true");
+                sessionStorage.setItem("loggedin", "true");
+                window.location.href = "menu.html";
+            } else {
+                alert("Invalid Credentials");
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
